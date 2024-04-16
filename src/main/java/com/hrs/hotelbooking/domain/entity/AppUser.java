@@ -1,25 +1,24 @@
 package com.hrs.hotelbooking.domain.entity;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.proxy.HibernateProxy;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
-import java.util.Objects;
 import java.util.Set;
 
-@Entity
+@Document(collection = "app_user")
 @Getter
 @Setter
 @RequiredArgsConstructor
-@Table(name = "app_user")
 public class AppUser {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @OneToMany(mappedBy = "user")
+    @DBRef
     private Set<Booking> bookings;
 
     // Remaining code
@@ -30,16 +29,15 @@ public class AppUser {
     public final boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
+
+        if (!(o instanceof AppUser)) return false;
         AppUser appUser = (AppUser) o;
-        return getId() != null && Objects.equals(getId(), appUser.getId());
+        return getId() != null && getId().equals(appUser.getId());
     }
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+        return getClass().hashCode();
     }
 
     @Override

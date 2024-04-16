@@ -1,8 +1,10 @@
 package com.hrs.hotelbooking.repository;
 
 import com.hrs.hotelbooking.domain.entity.AppUser;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Mono;
 
-public interface UserRepository extends JpaRepository<AppUser, Long> {
+public interface UserRepository extends ReactiveMongoRepository<AppUser, Long> {
     // Custom database queries can be defined here
+    Mono<AppUser> findByUsername(String username);
 }
